@@ -1,0 +1,16 @@
+# System files
+.DS_Store
+
+# Version control (if nested)
+.git/
+
+# Source code (compiled to main.dart.js)
+*.dart
+*.dill
+
+# Flutter build artifacts
+flutter_service_worker.js.gz
+
+# IDE files
+.idea/
+.vsc/
