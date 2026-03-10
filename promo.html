@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaBoard | Intelligence for your links</title>
+    <meta name="description"
+        content="The smartest way to organize your Instagram saves and web links. AI-powered extraction, categorization, and smart actions.">
+
+    <meta property="og:image" content="icons/Icon-512.png">
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
+    <link rel="icon" type="image/png" href="favicon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #833AB4;
+            --primary-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            --accent: #FCAF45;
+            --bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --card-bg: #f8fafc;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-content {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-dark);
+        }
+
+        .brand img {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(131, 58, 180, 0.3);
+        }
+
+        .brand span {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 180px 0 100px;
+            background: radial-gradient(circle at top right, rgba(252, 175, 69, 0.1), transparent 40%),
+                radial-gradient(circle at bottom left, rgba(131, 58, 180, 0.1), transparent 40%);
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(131, 58, 180, 0.1);
+            color: var(--primary);
+            border-radius: 99px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 5rem);
+            line-height: 1;
+            margin-bottom: 24px;
+            letter-spacing: -3px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 48px;
+            animation: slideUp 1s ease-out;
+        }
+
+        /* Store Buttons */
+        .store-btns {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            animation: slideUp 1.2s ease-out;
+        }
+
+        .store-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 28px;
+            background: #000;
+            color: white;
+            border-radius: 16px;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .store-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .store-btn i {
+            font-size: 28px;
+        }
+
+        .store-btn .btn-text {
+            text-align: left;
+        }
+
+        .store-btn .btn-text small {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .store-btn .btn-text span {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .btn-launch {
+            background: var(--primary-gradient);
+        }
+
+        /* Features */
+        .features {
+            padding: 120px 0;
+            background: #ffffff;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            padding: 48px;
+            background: var(--card-bg);
+            border-radius: 32px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.02);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.04);
+            background: white;
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 20px rgba(131, 58, 180, 0.1);
+        }
+
+        .feature-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 16px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Video Section */
+        .video-section {
+            padding: 120px 0;
+            background: var(--card-bg);
+        }
+
+        .video-wrap {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.15);
+            background: #000;
+            aspect-ratio: 16/9;
+        }
+
+        /* Footer */
+        footer {
+            padding: 100px 0 50px;
+            text-align: center;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .footer-brand {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .store-btns {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .store-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <div class="container nav-content">
+            <a href="#" class="brand">
+                <img src="favicon.png" alt="InstaBoard Logo">
+                <span>InstaBoard</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="store-btn btn-launch" style="padding: 10px 24px;">
+                    <span>Open App</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <span class="hero-badge">AI-Powered Link Intelligence</span>
+            <h1>Intelligence for <br>your links.</h1>
+            <p>Instantly extract recipes, locations, and events from any Instagram or web link. Your personal
+                intelligent board, organized by AI.</p>
+
+            <div class="store-btns">
+                <a href="index.html" class="store-btn btn-launch">
+                    <i class="fas fa-rocket"></i>
+                    <div class="btn-text">
+                        <small>Try it now</small>
+                        <span>Launch Web App</span>
+                    </div>
+                </a>
+                <a href="#" class="store-btn">
+                    <i class="fab fa-apple"></i>
+                    <div class="btn-text">
+                        <small>Coming soon to</small>
+                        <span>App Store</span>
+                    </div>
+                </a>
+                <a href="#" class="store-btn">
+                    <i class="fab fa-google-play"></i>
+                    <div class="btn-text">
+                        <small>Available soon on</small>
+                        <span>Google Play</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Supercharge your saves</h2>
+                <p>Stop losing links in your "Saved" folder. Let AI organize them for you.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                    <h3>AI Extraction</h3>
+                    <p>Our intelligent worker automatically pulls ingredients, authors, locations, and more from any
+                        URL.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-layer-group"></i></div>
+                    <h3>Smart Tags</h3>
+                    <p>Categorized and tagged automatically. Find your cooking recipes or travel spots in one click.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Smart Actions</h3>
+                    <p>Add events to your calendar, find directions on maps, or copy ingredients instantly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-brand">
+                <img src="favicon.png" alt="Logo" style="width: 32px;">
+                <span style="font-weight: 800; font-size: 1.25rem;">InstaBoard</span>
+            </div>
+            <div class="footer-links">
+                <a href="index.html">Launch App</a>
+                <a href="/privacy.html">Privacy Policy</a>
+                <a href="https://github.com/zmsp">Developer</a>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">&copy; 2026 InstaBoard. Intelligence for your links.
+            </p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
